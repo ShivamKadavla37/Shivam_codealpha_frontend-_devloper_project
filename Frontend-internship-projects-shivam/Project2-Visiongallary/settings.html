@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - VisionGallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="logo.jpeg" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-glow: #6366f1;
+            --border-color: #333333;
+            --shadow-color: rgba(99, 102, 241, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .app-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Settings Header */
+        .settings-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .settings-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .settings-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Settings Container */
+        .settings-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        /* Settings Section */
+        .settings-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: white;
+        }
+
+        /* Setting Item */
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .setting-item:hover {
+            background: var(--bg-secondary);
+            transform: translateX(5px);
+        }
+
+        /* Professional Animated Button Styles */
+        .btn-animated {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .btn-animated::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-animated::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-animated:hover::before {
+            left: 100%;
+        }
+
+        .btn-animated:hover::after {
+            opacity: 1;
+        }
+
+        .btn-animated:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-animated:active {
+            transform: translateY(-2px) scale(1.01);
+        }
+
+        .btn-secondary.btn-animated {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary.btn-animated:hover {
+            background: var(--glass-border);
+            border-color: var(--accent-primary);
+        }
+
+        .btn-pulse {
+            animation: professionalPulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes professionalPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 0 0 8px rgba(99, 102, 241, 0.3);
+                transform: scale(1.02);
+            }
+        }
+
+        .btn-glow {
+            position: relative;
+            overflow: visible;
+        }
+
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary), var(--accent-primary));
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-glow:hover::before {
+            opacity: 1;
+            animation: glowRotate 2s linear infinite;
+        }
+
+        @keyframes glowRotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* User Menu Styles */
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+            min-width: 200px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            margin-top: 0.5rem;
+        }
+
+        .user-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background: var(--glass-border);
+            color: var(--accent-primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 0.5rem 0;
+        }
+
+        .logout-btn {
+            color: var(--error-color) !important;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.1) !important;
+            color: var(--error-color) !important;
+        }
+
+        /* Professional Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent-primary);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .social-link:hover {
+            background: var(--accent-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .owner-info {
+            margin-top: 0.5rem;
+            font-weight: 500;
+            color: var(--accent-primary);
+        }
+
+        /* Responsive Footer */
+        @media (max-width: 768px) {
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-content {
+                padding: 0 1rem;
+            }
+        }
+
+        .setting-info {
+            flex: 1;
+        }
+
+        .setting-label {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .setting-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--border-color);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--accent-primary);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active::before {
+            transform: translateX(30px);
+        }
+
+        /* Select Dropdown */
+        .setting-select {
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .setting-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Input Field */
+        .setting-input {
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .setting-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Button */
+        .setting-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .setting-btn:hover {
+            background: var(--glass-border);
+            transform: translateY(-1px);
+        }
+
+        .setting-btn.danger {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--error-color);
+            color: var(--error-color);
+        }
+
+        .setting-btn.danger:hover {
+            background: var(--error-color);
+            color: white;
+        }
+
+        /* Color Picker */
+        .color-picker {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .color-option.active {
+            border-color: var(--text-primary);
+            transform: scale(1.1);
+        }
+
+        .color-option[data-color="blue"] {
+            background: #6366f1;
+        }
+
+        .color-option[data-color="purple"] {
+            background: #8b5cf6;
+        }
+
+        .color-option[data-color="green"] {
+            background: #10b981;
+        }
+
+        .color-option[data-color="orange"] {
+            background: #f59e0b;
+        }
+
+        .color-option[data-color="red"] {
+            background: #ef4444;
+        }
+
+        /* Save Button */
+        .save-section {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .save-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow-color);
+        }
+
+        .save-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Status Message */
+        .status-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .status-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .status-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .settings-title {
+                font-size: 2rem;
+            }
+
+            .settings-container {
+                padding: 1.5rem;
+            }
+
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .setting-item:hover {
+                transform: none;
+            }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px var(--accent-glow);
+            }
+
+            to {
+                box-shadow: 0 0 20px var(--accent-glow), 0 0 30px var(--accent-glow);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo-section" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                <div class="logo">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <span class="app-title">VisionGallery</span>
+            </div>
+
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="carousel.html">Carousel</a></li>
+                    <li><a href="profile.html">Artists</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="upload.html" class="btn btn-secondary btn-animated btn-glow">
+                    <i class="fas fa-upload"></i>
+                    Upload
+                </a>
+                <a href="profile.html" class="btn btn-primary btn-animated btn-pulse btn-glow">
+                    <i class="fas fa-user"></i>
+                    Profile
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Settings Header -->
+        <div class="settings-header">
+            <h1 class="settings-title">Settings</h1>
+            <p class="settings-subtitle">Customize your VisionGallery experience</p>
+        </div>
+
+        <!-- Settings Container -->
+        <div class="settings-container">
+            <!-- Status Message -->
+            <div class="status-message" id="statusMessage"></div>
+
+            <!-- Appearance Section -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    Appearance
+                </h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Dark Mode</div>
+                        <div class="setting-description">Use dark theme for better viewing experience</div>
+                    </div>
+                    <div class="toggle-switch active" id="darkModeToggle"></div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Accent Color</div>
+                        <div class="setting-description">Choose your preferred accent color</div>
+                    </div>
+                    <div class="color-picker">
+                        <div class="color-option active" data-color="blue"></div>
+                        <div class="color-option" data-color="purple"></div>
+                        <div class="color-option" data-color="green"></div>
+                        <div class="color-option" data-color="orange"></div>
+                        <div class="color-option" data-color="red"></div>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Animation Effects</div>
+                        <div class="setting-description">Enable smooth animations and transitions</div>
+                    </div>
+                    <div class="toggle-switch active" id="animationToggle"></div>
+                </div>
+            </div>
+
+            <!-- Notifications Section -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    Notifications
+                </h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Email Notifications</div>
+                        <div class="setting-description">Receive updates about your photos and followers</div>
+                    </div>
+                    <div class="toggle-switch active" id="emailToggle"></div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Push Notifications</div>
+                        <div class="setting-description">Get instant notifications on your device</div>
+                    </div>
+                    <div class="toggle-switch" id="pushToggle"></div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">New Follower Alerts</div>
+                        <div class="setting-description">Notify when someone follows you</div>
+                    </div>
+                    <div class="toggle-switch active" id="followerToggle"></div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Like Notifications</div>
+                        <div class="setting-description">Get notified when someone likes your photos</div>
+                    </div>
+                    <div class="toggle-switch active" id="likeToggle"></div>
+                </div>
+            </div>
+
+            <!-- Privacy Section -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    Privacy & Security
+                </h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Profile Visibility</div>
+                        <div class="setting-description">Control who can see your profile</div>
+                    </div>
+                    <select class="setting-select" id="profileVisibility">
+                        <option value="public">Public</option>
+                        <option value="followers">Followers Only</option>
+                        <option value="private">Private</option>
+                    </select>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Photo Downloads</div>
+                        <div class="setting-description">Allow others to download your photos</div>
+                    </div>
+                    <div class="toggle-switch" id="downloadToggle"></div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Two-Factor Authentication</div>
+                        <div class="setting-description">Add an extra layer of security</div>
+                    </div>
+                    <button class="setting-btn" id="twoFactorBtn">Enable</button>
+                </div>
+            </div>
+
+            <!-- Account Section -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    Account
+                </h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Display Name</div>
+                        <div class="setting-description">Your name as it appears to others</div>
+                    </div>
+                    <input type="text" class="setting-input" id="displayName" value="Sarah Chen">
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Email Address</div>
+                        <div class="setting-description">Your primary email for notifications</div>
+                    </div>
+                    <input type="email" class="setting-input" id="emailAddress" value="sarah@example.com">
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Bio</div>
+                        <div class="setting-description">Tell others about yourself</div>
+                    </div>
+                    <input type="text" class="setting-input" id="userBio" value="Professional photographer">
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Location</div>
+                        <div class="setting-description">Where you're based</div>
+                    </div>
+                    <input type="text" class="setting-input" id="userLocation" value="San Francisco, CA">
+                </div>
+            </div>
+
+            <!-- Data & Storage Section -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    Data & Storage
+                </h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Auto-Save</div>
+                        <div class="setting-description">Automatically save your work</div>
+                    </div>
+                    <div class="toggle-switch active" id="autoSaveToggle"></div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Image Quality</div>
+                        <div class="setting-description">Quality of uploaded images</div>
+                    </div>
+                    <select class="setting-select" id="imageQuality">
+                        <option value="high">High Quality</option>
+                        <option value="medium">Medium Quality</option>
+                        <option value="low">Low Quality</option>
+                    </select>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Clear Cache</div>
+                        <div class="setting-description">Free up storage space</div>
+                    </div>
+                    <button class="setting-btn" id="clearCacheBtn">Clear Now</button>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <div class="section-icon" style="background: var(--error-color);">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    Danger Zone
+                </h2>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-label">Delete Account</div>
+                        <div class="setting-description">Permanently delete your account and all data</div>
+                    </div>
+                    <button class="setting-btn danger" id="deleteAccountBtn">Delete Account</button>
+                </div>
+            </div>
+
+            <!-- Save Section -->
+            <div class="save-section">
+                <button class="save-btn" id="saveSettingsBtn">
+                    <i class="fas fa-save"></i>
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize settings page
+        function initSettingsPage() {
+            const statusMessage = document.getElementById('statusMessage');
+            const saveBtn = document.getElementById('saveSettingsBtn');
+
+            // Toggle switches
+            const toggles = document.querySelectorAll('.toggle-switch');
+            toggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    toggle.classList.toggle('active');
+                    showStatus('Setting updated', 'success');
+                });
+            });
+
+            // Color picker
+            const colorOptions = document.querySelectorAll('.color-option');
+            colorOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    colorOptions.forEach(o => o.classList.remove('active'));
+                    option.classList.add('active');
+                    showStatus('Accent color updated', 'success');
+                });
+            });
+
+            // Select dropdowns
+            const selects = document.querySelectorAll('.setting-select');
+            selects.forEach(select => {
+                select.addEventListener('change', () => {
+                    showStatus('Setting updated', 'success');
+                });
+            });
+
+            // Input fields
+            const inputs = document.querySelectorAll('.setting-input');
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    showStatus('Setting updated', 'success');
+                });
+            });
+
+            // Buttons
+            document.getElementById('twoFactorBtn').addEventListener('click', () => {
+                alert('Two-factor authentication setup would open here');
+            });
+
+            document.getElementById('clearCacheBtn').addEventListener('click', () => {
+                showStatus('Cache cleared successfully', 'success');
+            });
+
+            document.getElementById('deleteAccountBtn').addEventListener('click', () => {
+                if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                    showStatus('Account deletion initiated', 'error');
+                }
+            });
+
+            // Save button
+            saveBtn.addEventListener('click', () => {
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+                setTimeout(() => {
+                    showStatus('Settings saved successfully!', 'success');
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+                }, 2000);
+            });
+
+            // Show status message
+            function showStatus(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = `status-message status-${type}`;
+                statusMessage.style.display = 'block';
+
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 3000);
+            }
+
+            // Load saved settings (simulate)
+            function loadSettings() {
+                // In a real app, this would load from localStorage or API
+                console.log('Loading saved settings...');
+            }
+
+            // Initialize
+            loadSettings();
+        }
+
+        // Authentication functionality
+        function checkAuthStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+
+            const navActions = document.querySelector('.nav-actions');
+
+            if (isLoggedIn && userData.name) {
+                navActions.innerHTML = `
+                    <a href="upload.html" class="btn btn-secondary btn-animated btn-glow">
+                        <i class="fas fa-upload"></i>
+                        Upload
+                    </a>
+                    <div class="user-menu">
+                        <button class="btn btn-primary btn-animated btn-pulse btn-glow user-btn" onclick="toggleUserMenu()">
+                            <i class="fas fa-user"></i>
+                            ${userData.name.split(' ')[0]}
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="profile.html" class="dropdown-item">
+                                <i class="fas fa-user-circle"></i>
+                                Profile
+                            </a>
+                            <a href="settings.html" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item logout-btn" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                navActions.innerHTML = `
+                    <a href="upload.html" class="btn btn-secondary btn-animated btn-glow">
+                        <i class="fas fa-upload"></i>
+                        Upload
+                    </a>
+                    <a href="login.html" class="btn btn-primary btn-animated btn-pulse btn-glow">
+                        <i class="fas fa-user"></i>
+                        Login
+                    </a>
+                `;
+            }
+        }
+
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userData');
+            window.location.href = 'index.html';
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function (event) {
+            const userMenu = document.querySelector('.user-menu');
+            const dropdown = document.getElementById('userDropdown');
+
+            if (userMenu && !userMenu.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            initSettingsPage();
+            checkAuthStatus();
+        });
+    </script>
+
+    <!-- Professional Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-section">
+                    <h3>About Us</h3>
+                    <p>We are passionate about photography and dedicated to showcasing the best works from talented
+                        photographers around the world.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="index.html">Home</a>
+                    <a href="gallery.html">Gallery</a>
+                    <a href="carousel.html">Carousel</a>
+                    <a href="profile.html">Artists</a>
+                    <a href="about.html">About</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>Email: info@visiongallery.com</p>
+                    <p>Phone: +1 (555) 123-4567</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 VisionGallery. All rights reserved.</p>
+                <p class="owner-info">Designed and Developed by Shivam Kadavla</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Carousel - VisionGallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="logo.jpeg" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-glow: #6366f1;
+            --border-color: #333333;
+            --shadow-color: rgba(99, 102, 241, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .app-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .carousel-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .carousel-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .carousel-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Carousel Container */
+        .carousel-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--bg-tertiary);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Main Image Display */
+        .main-image-container {
+            position: relative;
+            height: 600px;
+            overflow: hidden;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .image-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 2rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-container:hover .image-info {
+            transform: translateY(0);
+        }
+
+        .image-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .image-artist {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .image-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Navigation Arrows */
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            font-size: 1.2rem;
+        }
+
+        .carousel-nav:hover {
+            background: var(--accent-primary);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-nav.prev {
+            left: 20px;
+        }
+
+        .carousel-nav.next {
+            right: 20px;
+        }
+
+        /* Thumbnail Strip */
+        .thumbnail-strip {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .thumbnail-strip::-webkit-scrollbar {
+            display: none;
+        }
+
+        .thumbnail {
+            flex-shrink: 0;
+            width: 80px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .thumbnail.active {
+            border-color: var(--accent-primary);
+            transform: scale(1.05);
+        }
+
+        .thumbnail:hover {
+            transform: scale(1.05);
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Dot Indicators */
+        .dot-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--accent-primary);
+            transform: scale(1.2);
+        }
+
+        .dot:hover {
+            background: var(--accent-secondary);
+        }
+
+        /* Controls */
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+        }
+
+        .control-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-btn:hover {
+            background: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .carousel-title {
+                font-size: 2rem;
+            }
+
+            .main-image-container {
+                height: 400px;
+            }
+
+            .carousel-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .thumbnail {
+                width: 60px;
+                height: 45px;
+            }
+
+            .image-info {
+                padding: 1rem;
+            }
+
+            .image-title {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo-section" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                <div class="logo">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <span class="app-title">VisionGallery</span>
+            </div>
+
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="carousel.html">Carousel</a></li>
+                    <li><a href="profile.html">Artists</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Carousel Header -->
+        <div class="carousel-header">
+            <h1 class="carousel-title">Photo Carousel</h1>
+            <p class="carousel-subtitle">Swipe through our featured collection with smooth navigation</p>
+        </div>
+
+        <!-- Carousel Container -->
+        <div class="carousel-container">
+            <!-- Main Image Display -->
+            <div class="main-image-container">
+                <img src="" alt="" class="main-image" id="mainImage">
+
+                <!-- Navigation Arrows -->
+                <button class="carousel-nav prev" id="prevBtn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-nav next" id="nextBtn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <!-- Image Info Overlay -->
+                <div class="image-info">
+                    <h3 class="image-title" id="imageTitle"></h3>
+                    <p class="image-artist" id="imageArtist"></p>
+                    <p class="image-description" id="imageDescription"></p>
+                </div>
+            </div>
+
+            <!-- Thumbnail Strip -->
+            <div class="thumbnail-strip" id="thumbnailStrip">
+                <!-- Thumbnails will be generated here -->
+            </div>
+
+            <!-- Dot Indicators -->
+            <div class="dot-indicators" id="dotIndicators">
+                <!-- Dots will be generated here -->
+            </div>
+
+            <!-- Controls -->
+            <div class="carousel-controls">
+                <button class="control-btn" id="playPauseBtn">
+                    <i class="fas fa-play"></i>
+                    Play
+                </button>
+                <button class="control-btn" id="fullscreenBtn">
+                    <i class="fas fa-expand"></i>
+                    Fullscreen
+                </button>
+                <button class="control-btn" id="downloadBtn">
+                    <i class="fas fa-download"></i>
+                    Download
+                </button>
+                <button class="control-btn" id="shareBtn">
+                    <i class="fas fa-share"></i>
+                    Share
+                </button>
+                <button class="control-btn" onclick="viewDetail()">
+                    <i class="fas fa-info-circle"></i>
+                    Detail
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Carousel data
+        const carouselData = [
+            {
+                id: 1,
+                title: "Mountain Sunrise",
+                artist: "Shivam Kadavla",
+                description: "A breathtaking view of the mountains at dawn, capturing the golden light as it breaks through the clouds.",
+                image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop",
+                thumbnail: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=150&fit=crop"
+            },
+            {
+                id: 2,
+                title: "Urban Night",
+                artist: "Satyam Kadavla",
+                description: "The vibrant energy of city life captured in neon lights and bustling streets after dark.",
+                image: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1200&h=800&fit=crop",
+                thumbnail: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=200&h=150&fit=crop"
+            },
+            {
+                id: 3,
+                title: "Fashion Portrait",
+                artist: "Rajendra Kadavla",
+                description: "A stunning fashion portrait showcasing modern elegance and sophisticated style.",
+                image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=1200&h=800&fit=crop",
+                thumbnail: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&h=150&fit=crop"
+            },
+            {
+                id: 4,
+                title: "Forest Path",
+                artist: "Shital Kadavla",
+                description: "A serene forest path leading through ancient trees, creating a sense of peace and tranquility.",
+                image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&h=800&fit=crop",
+                thumbnail: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=200&h=150&fit=crop"
+            },
+            {
+                id: 5,
+                title: "City Lights",
+                artist: "David Kim",
+                description: "The mesmerizing glow of city lights reflecting on water, creating a magical urban landscape.",
+                image: "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1200&h=800&fit=crop",
+                thumbnail: "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=200&h=150&fit=crop"
+            },
+            {
+                id: 6,
+                title: "Elegant Model",
+                artist: "Lisa Wang",
+                description: "A sophisticated fashion shoot featuring elegant poses and high-end styling.",
+                image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&h=800&fit=crop",
+                thumbnail: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=150&fit=crop"
+            }
+        ];
+
+        let currentIndex = 0;
+        let isPlaying = false;
+        let playInterval;
+
+        // Initialize carousel
+        function initCarousel() {
+            const mainImage = document.getElementById('mainImage');
+            const imageTitle = document.getElementById('imageTitle');
+            const imageArtist = document.getElementById('imageArtist');
+            const imageDescription = document.getElementById('imageDescription');
+            const thumbnailStrip = document.getElementById('thumbnailStrip');
+            const dotIndicators = document.getElementById('dotIndicators');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const shareBtn = document.getElementById('shareBtn');
+
+            // Check if we should start from a specific image
+            const startImageId = localStorage.getItem('carouselStartImage');
+            if (startImageId) {
+                const startIndex = carouselData.findIndex(img => img.id === parseInt(startImageId));
+                if (startIndex !== -1) {
+                    currentIndex = startIndex;
+                }
+                // Clear the stored image ID
+                localStorage.removeItem('carouselStartImage');
+            }
+
+            // Generate thumbnails
+            function generateThumbnails() {
+                thumbnailStrip.innerHTML = carouselData.map((item, index) => `
+                    <div class="thumbnail ${index === currentIndex ? 'active' : ''}" data-index="${index}">
+                        <img src="${item.thumbnail}" alt="${item.title}">
+                    </div>
+                `).join('');
+
+                // Add click events to thumbnails
+                thumbnailStrip.querySelectorAll('.thumbnail').forEach(thumb => {
+                    thumb.addEventListener('click', () => {
+                        const index = parseInt(thumb.dataset.index);
+                        goToSlide(index);
+                    });
+                });
+            }
+
+            // Generate dot indicators
+            function generateDots() {
+                dotIndicators.innerHTML = carouselData.map((_, index) => `
+                    <div class="dot ${index === currentIndex ? 'active' : ''}" data-index="${index}"></div>
+                `).join('');
+
+                // Add click events to dots
+                dotIndicators.querySelectorAll('.dot').forEach(dot => {
+                    dot.addEventListener('click', () => {
+                        const index = parseInt(dot.dataset.index);
+                        goToSlide(index);
+                    });
+                });
+            }
+
+            // Update main image and info
+            function updateSlide(index) {
+                const item = carouselData[index];
+
+                mainImage.src = item.image;
+                mainImage.alt = item.title;
+                imageTitle.textContent = item.title;
+                imageArtist.textContent = `by ${item.artist}`;
+                imageDescription.textContent = item.description;
+
+                // Update active states
+                thumbnailStrip.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+                    thumb.classList.toggle('active', i === index);
+                });
+
+                dotIndicators.querySelectorAll('.dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+
+                // Add animation class
+                mainImage.classList.add('fade-in');
+                setTimeout(() => mainImage.classList.remove('fade-in'), 500);
+            }
+
+            // Navigate to specific slide
+            function goToSlide(index) {
+                if (index < 0) index = carouselData.length - 1;
+                if (index >= carouselData.length) index = 0;
+
+                currentIndex = index;
+                updateSlide(currentIndex);
+            }
+
+            // Next slide
+            function nextSlide() {
+                goToSlide(currentIndex + 1);
+            }
+
+            // Previous slide
+            function prevSlide() {
+                goToSlide(currentIndex - 1);
+            }
+
+            // Play/pause functionality
+            function togglePlay() {
+                if (isPlaying) {
+                    clearInterval(playInterval);
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i> Play';
+                    isPlaying = false;
+                } else {
+                    playInterval = setInterval(nextSlide, 3000);
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+                    isPlaying = true;
+                }
+            }
+
+            // Fullscreen functionality
+            function toggleFullscreen() {
+                const container = document.querySelector('.carousel-container');
+                if (!document.fullscreenElement) {
+                    container.requestFullscreen().catch(err => {
+                        console.log('Error attempting to enable fullscreen:', err);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            }
+
+            // Download functionality
+            function downloadCurrent() {
+                const item = carouselData[currentIndex];
+                const link = document.createElement('a');
+                link.href = item.image;
+                link.download = `${item.title}-${item.artist}.jpg`;
+                link.click();
+            }
+
+            // Share functionality
+            function shareCurrent() {
+                const item = carouselData[currentIndex];
+                if (navigator.share) {
+                    navigator.share({
+                        title: item.title,
+                        text: `Check out this amazing photo by ${item.artist}`,
+                        url: window.location.href
+                    });
+                } else {
+                    navigator.clipboard.writeText(`${item.title} by ${item.artist} - ${window.location.href}`);
+                    alert('Link copied to clipboard!');
+                }
+            }
+
+            // Event listeners
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+            playPauseBtn.addEventListener('click', togglePlay);
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
+            downloadBtn.addEventListener('click', downloadCurrent);
+            shareBtn.addEventListener('click', shareCurrent);
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                switch (e.key) {
+                    case 'ArrowLeft':
+                        prevSlide();
+                        break;
+                    case 'ArrowRight':
+                        nextSlide();
+                        break;
+                    case ' ':
+                        e.preventDefault();
+                        togglePlay();
+                        break;
+                }
+            });
+
+            // Touch/swipe support
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            const container = document.querySelector('.carousel-container');
+            container.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+
+            container.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                }
+            }
+
+            // Initialize
+            generateThumbnails();
+            generateDots();
+            updateSlide(currentIndex);
+        }
+
+        // View detail function
+        function viewDetail() {
+            const currentItem = carouselData[currentIndex];
+            // Store the image ID for the detail page
+            localStorage.setItem('selectedImageId', currentItem.id);
+            // Navigate to detail page
+            window.location.href = 'detail.html';
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initCarousel);
+    </script>
+</body>
+
+</html>

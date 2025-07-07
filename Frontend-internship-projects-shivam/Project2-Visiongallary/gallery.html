@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - VisionGallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="logo.jpeg" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-glow: #6366f1;
+            --border-color: #333333;
+            --shadow-color: rgba(99, 102, 241, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .app-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 3rem;
+            background: var(--glass-bg);
+            padding: 0.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        /* Gallery Grid */
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-tertiary);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            aspect-ratio: 4/3;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .item-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom,
+                    transparent 0%,
+                    transparent 50%,
+                    rgba(0, 0, 0, 0.8) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .item-overlay {
+            opacity: 1;
+        }
+
+        .item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-artist {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-size: 0.8rem;
+        }
+
+        .action-btn:hover {
+            background: var(--accent-primary);
+            transform: scale(1.1);
+        }
+
+        /* Load More Button */
+        .load-more {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .load-more-btn {
+            padding: 1rem 2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+
+        .load-more-btn:hover {
+            background: var(--glass-border);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .gallery-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+
+            .category-tabs {
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
+
+            .tab-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo-section" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                <div class="logo">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <span class="app-title">VisionGallery</span>
+            </div>
+
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="carousel.html">Carousel</a></li>
+                    <li><a href="profile.html">Artists</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="upload.html" class="btn btn-secondary">
+                    <i class="fas fa-upload"></i>
+                    Upload
+                </a>
+                <a href="login.html" class="btn btn-primary">
+                    <i class="fas fa-user"></i>
+                    Login
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Photo Gallery</h1>
+            <p class="page-subtitle">Explore our curated collection of stunning photographs</p>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+            <button class="tab-btn active" data-category="all">
+                <i class="fas fa-th"></i>
+                All Photos
+            </button>
+            <button class="tab-btn" data-category="nature">
+                <i class="fas fa-tree"></i>
+                Nature
+            </button>
+            <button class="tab-btn" data-category="street">
+                <i class="fas fa-city"></i>
+                Street
+            </button>
+            <button class="tab-btn" data-category="fashion">
+                <i class="fas fa-tshirt"></i>
+                Fashion
+            </button>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="gallery-container" id="galleryContainer">
+            <!-- Gallery items will be dynamically generated -->
+        </div>
+
+        <!-- Load More Button -->
+        <div class="load-more">
+            <button class="load-more-btn" id="loadMoreBtn">
+                <i class="fas fa-plus"></i>
+                Load More Photos
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Extended gallery data
+        const galleryData = [
+            {
+                id: 1,
+                title: "Mountain Sunrise",
+                artist: "Shivam Kadavla",
+                category: "nature",
+                image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"
+            },
+            {
+                id: 2,
+                title: "Urban Night",
+                artist: "Satyam Kadavla",
+                category: "street",
+                image: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=400&h=300&fit=crop"
+            },
+            {
+                id: 3,
+                title: "Fashion Portrait",
+                artist: "Rajendra Kadavla",
+                category: "fashion",
+                image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=300&fit=crop"
+            },
+            {
+                id: 4,
+                title: "Forest Path",
+                artist: "Shital Kadavla",
+                category: "nature",
+                image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop"
+            },
+            {
+                id: 5,
+                title: "City Lights",
+                artist: "David Kim",
+                category: "street",
+                image: "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=400&h=300&fit=crop"
+            },
+            {
+                id: 6,
+                title: "Elegant Model",
+                artist: "Lisa Wang",
+                category: "fashion",
+                image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=300&fit=crop"
+            },
+            {
+                id: 7,
+                title: "Ocean Waves",
+                artist: "Tom Wilson",
+                category: "nature",
+                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop"
+            },
+            {
+                id: 8,
+                title: "Street Art",
+                artist: "Maria Garcia",
+                category: "street",
+                image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=300&fit=crop"
+            },
+            {
+                id: 9,
+                title: "Runway Show",
+                artist: "James Lee",
+                category: "fashion",
+                image: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=300&fit=crop"
+            },
+            {
+                id: 10,
+                title: "Desert Sunset",
+                artist: "Anna Smith",
+                category: "nature",
+                image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"
+            },
+            {
+                id: 11,
+                title: "Neon Signs",
+                artist: "Carlos Mendez",
+                category: "street",
+                image: "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=400&h=300&fit=crop"
+            },
+            {
+                id: 12,
+                title: "Studio Portrait",
+                artist: "Rachel Green",
+                category: "fashion",
+                image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=300&fit=crop"
+            },
+            {
+                id: 13,
+                title: "Waterfall",
+                artist: "Chris Brown",
+                category: "nature",
+                image: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=400&h=300&fit=crop"
+            },
+            {
+                id: 14,
+                title: "Rainy Street",
+                artist: "Sophie Turner",
+                category: "street",
+                image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"
+            },
+            {
+                id: 15,
+                title: "Fashion Editorial",
+                artist: "Michael Clark",
+                category: "fashion",
+                image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=300&fit=crop"
+            }
+        ];
+
+        let currentCategory = 'all';
+        let displayedItems = 12;
+
+        // Initialize gallery
+        function initGallery() {
+            const galleryContainer = document.getElementById('galleryContainer');
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+            // Render gallery items
+            function renderGallery(category = 'all', limit = displayedItems) {
+                const filteredData = category === 'all'
+                    ? galleryData
+                    : galleryData.filter(item => item.category === category);
+
+                const itemsToShow = filteredData.slice(0, limit);
+
+                galleryContainer.innerHTML = itemsToShow.map(item => `
+                    <div class="gallery-item" data-category="${item.category}" onclick="viewImageDetail(${item.id})">
+                        <img src="${item.image}" alt="${item.title}" loading="lazy">
+                        <div class="item-overlay">
+                            <h3 class="item-title">${item.title}</h3>
+                            <p class="item-artist">by ${item.artist}</p>
+                            <div class="item-actions">
+                                <button class="action-btn" onclick="viewImage(${item.id}); event.stopPropagation();" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn" onclick="downloadImage(${item.id}); event.stopPropagation();" title="Download">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="action-btn" onclick="shareImage(${item.id}); event.stopPropagation();" title="Share">
+                                    <i class="fas fa-share"></i>
+                                </button>
+                                <button class="action-btn" onclick="likeImage(${item.id}); event.stopPropagation();" title="Like">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Show/hide load more button
+                loadMoreBtn.style.display = itemsToShow.length < filteredData.length ? 'block' : 'none';
+            }
+
+            // Tab functionality
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    currentCategory = btn.dataset.category;
+                    displayedItems = 12; // Reset to initial count
+                    renderGallery(currentCategory, displayedItems);
+                });
+            });
+
+            // Load more functionality
+            loadMoreBtn.addEventListener('click', () => {
+                displayedItems += 6;
+                renderGallery(currentCategory, displayedItems);
+            });
+
+            // Initial render
+            renderGallery();
+        }
+
+        // Image actions
+        function viewImage(id) {
+            const item = galleryData.find(img => img.id === id);
+            if (item) {
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.95);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 2000;
+                    cursor: pointer;
+                `;
+
+                modal.innerHTML = `
+                    <div style="text-align: center;">
+                        <img src="${item.image.replace('w=400&h=300', 'w=1200&h=800')}" 
+                             alt="${item.title}" 
+                             style="max-width: 90%; max-height: 80%; object-fit: contain; border-radius: 8px;">
+                        <div style="margin-top: 1rem; color: white;">
+                            <h3>${item.title}</h3>
+                            <p>by ${item.artist}</p>
+                        </div>
+                    </div>
+                `;
+
+                modal.addEventListener('click', () => modal.remove());
+                document.body.appendChild(modal);
+            }
+        }
+
+        function downloadImage(id) {
+            const item = galleryData.find(img => img.id === id);
+            if (item) {
+                const link = document.createElement('a');
+                link.href = item.image;
+                link.download = `${item.title}-${item.artist}.jpg`;
+                link.click();
+            }
+        }
+
+        function shareImage(id) {
+            const item = galleryData.find(img => img.id === id);
+            if (item && navigator.share) {
+                navigator.share({
+                    title: item.title,
+                    text: `Check out this amazing photo by ${item.artist}`,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(`${item.title} by ${item.artist} - ${window.location.href}`);
+                alert('Link copied to clipboard!');
+            }
+        }
+
+        function likeImage(id) {
+            const item = galleryData.find(img => img.id === id);
+            if (item) {
+                // Toggle like state (in a real app, this would update the database)
+                const btn = event.target.closest('.action-btn');
+                btn.style.background = btn.style.background === 'rgb(99, 102, 241)' ? 'var(--glass-bg)' : 'var(--accent-primary)';
+                alert(`Liked: ${item.title}`);
+            }
+        }
+
+        // View image detail page
+        function viewImageDetail(id) {
+            // Store the image ID in localStorage for the detail page
+            localStorage.setItem('selectedImageId', id);
+            // Navigate to detail page
+            window.location.href = 'detail.html';
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initGallery);
+    </script>
+</body>
+
+</html>
